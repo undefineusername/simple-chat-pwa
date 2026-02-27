@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Check2 } from 'lucide-react';
+import { Check, CheckCheck } from 'lucide-react';
 
 interface MessageBubbleProps {
   text: string;
@@ -19,16 +19,14 @@ export default function MessageBubble({
 
   return (
     <div
-      className={`relative px-4 py-3 rounded-2xl ${
-        isUser
+      className={`relative px-4 py-3 rounded-2xl ${isUser
           ? 'bg-accent text-accent-foreground rounded-br-none'
           : 'bg-secondary text-foreground rounded-bl-none'
-      }`}
+        }`}
     >
       <p className="text-base leading-relaxed break-words">{text}</p>
-      <div className={`text-xs mt-1 flex items-center gap-1 ${
-        isUser ? 'text-accent-foreground/60' : 'text-muted-foreground'
-      }`}>
+      <div className={`text-xs mt-1 flex items-center gap-1 ${isUser ? 'text-accent-foreground/60' : 'text-muted-foreground'
+        }`}>
         {isUser && (
           <>
             {status === 'read' ? (
