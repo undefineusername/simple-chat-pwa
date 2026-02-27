@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { Settings } from 'lucide-react';
 import ChatListItem from './ChatListItem';
 import ChatListSearch from './ChatListSearch';
+import SettingsPanel from './SettingsPanel';
 import type { Room } from '@/types/chat';
 
 interface ChatListViewProps {
@@ -18,6 +19,7 @@ export default function ChatListView({
   onSelectRoom,
 }: ChatListViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const filteredRooms = useMemo(() => {
     if (!searchQuery) return rooms;
@@ -28,16 +30,30 @@ export default function ChatListView({
   }, [rooms, searchQuery]);
 
   return (
-    <div className="h-full w-full flex flex-col bg-background">
+    <div className="h-full w-full flex flex-col bg-background relative">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-border">
-        <h1 className="text-xl font-semibold text-foreground mb-3">Chats</h1>
+      <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+        <h1 className="text-xl font-semibold text-foreground">Chats</h1>
+        <button
+          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+          className="p-1.5 hover:bg-secondary rounded-lg transition-colors flex-shrink-0"
+          aria-label="Open settings"
+        >
+          <Settings className="w-5 h-5 text-foreground" />
+        </button>
+      </div>
+
+      {/* Settings Panel */}
+      <SettingsPanel isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+
+      {/* Search */}
+      <div className="px-4 py-2 border-b border-border">
         <ChatListSearch onSearch={setSearchQuery} />
       </div>
 
       {/* Chat List */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <motion.div layout className="space-y-1 px-2 py-2">
+        <div className="space-y-1 px-2 py-2">
           {filteredRooms.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p className="text-sm">
@@ -54,7 +70,7 @@ export default function ChatListView({
               />
             ))
           )}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

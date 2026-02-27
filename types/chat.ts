@@ -3,13 +3,14 @@ export interface Message {
   senderId: string;
   text: string;
   timestamp: string | Date;
-  status: 'sending' | 'sent' | 'delivered';
+  status: 'sending' | 'sent' | 'delivered' | 'read';
 }
 
 export interface Participant {
   id: string;
   name: string;
   avatar?: string;
+  isOnline?: boolean;
 }
 
 export interface Room {
@@ -18,4 +19,6 @@ export interface Room {
   messages: Message[];
   createdAt: Date;
   lastMessageAt?: Date;
+  isPinned?: boolean;
+  isMuted?: boolean;
 }

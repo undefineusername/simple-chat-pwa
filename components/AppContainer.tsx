@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import ChatLayout from './ChatLayout';
 import ChatListView from './ChatListView';
@@ -40,40 +39,26 @@ export default function AppContainer({ rooms }: AppContainerProps) {
 
       {/* Mobile: Toggle Between List and Chat */}
       {isMobile && (
-        <AnimatePresence mode="wait">
+        <>
           {!activeRoomId ? (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.3 }}
-              className="w-full"
-            >
+            <div className="w-full">
               <ChatListView
                 rooms={rooms}
                 activeRoomId={activeRoomId}
                 onSelectRoom={setActiveRoomId}
               />
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
-              key="chat"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 100 }}
-              transition={{ duration: 0.3 }}
-              className="w-full flex flex-col"
-            >
+            <div className="w-full flex flex-col">
               {activeRoom && (
                 <ChatLayout
                   room={activeRoom}
                   onBack={() => setActiveRoomId('')}
                 />
               )}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </>
       )}
     </div>
   );

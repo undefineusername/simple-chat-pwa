@@ -1,41 +1,45 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { Check, Check2 } from 'lucide-react';
 
 interface MessageBubbleProps {
   text: string;
   sender: 'user' | 'other';
   timestamp: string;
+  status?: 'sending' | 'sent' | 'delivered' | 'read';
 }
 
 export default function MessageBubble({
   text,
   sender,
   timestamp,
+  status = 'delivered',
 }: MessageBubbleProps) {
   const isUser = sender === 'user';
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-      className={`group relative px-4 py-3 rounded-2xl transition-colors ${
+    <div
+      className={`relative px-4 py-3 rounded-2xl ${
         isUser
           ? 'bg-accent text-accent-foreground rounded-br-none'
           : 'bg-secondary text-foreground rounded-bl-none'
       }`}
     >
       <p className="text-base leading-relaxed break-words">{text}</p>
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
-        className={`text-xs mt-1 ${
-          isUser ? 'text-accent-foreground/60' : 'text-muted-foreground'
-        }`}
-      >
-        {timestamp}
-      </motion.div>
-    </motion.div>
+      <div className={`text-xs mt-1 flex items-center gap-1 ${
+        isUser ? 'text-accent-foreground/60' : 'text-muted-foreground'
+      }`}>
+        {isUser && (
+          <>
+            {status === 'read' ? (
+              <Check2 className="w-3 h-3 text-accent-foreground/80" />
+            ) : (
+              <Check className="w-3 h-3 text-accent-foreground/80" />
+            )}
+          </>
+        )}
+        <span>{timestamp}</span>
+      </div>
+    </div>
   );
 }

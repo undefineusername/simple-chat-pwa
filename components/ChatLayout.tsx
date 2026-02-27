@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { ArrowLeft, Phone, User } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import EncryptionBanner from './EncryptionBanner';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import SettingsPanel from './SettingsPanel';
 import type { Room, Message } from '@/types/chat';
 
 interface ChatLayoutProps {
@@ -16,7 +14,6 @@ interface ChatLayoutProps {
 
 export default function ChatLayout({ room, onBack }: ChatLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const otherParticipant = room.participants[0];
 
   const handleSendMessage = (text: string) => {
@@ -25,7 +22,7 @@ export default function ChatLayout({ room, onBack }: ChatLayoutProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background text-foreground overflow-hidden relative">
+    <div className="flex flex-col h-full bg-background text-foreground overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center gap-3 justify-between">
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -41,22 +38,28 @@ export default function ChatLayout({ room, onBack }: ChatLayoutProps) {
             <h2 className="text-sm font-semibold text-foreground truncate">
               {otherParticipant?.name}
             </h2>
-            <p className="text-xs text-muted-foreground">Active now</p>
+            <p className="text-xs text-muted-foreground">
+              {otherParticipant?.isOnline ? 'Active now' : 'Offline'}
+            </p>
           </div>
         </div>
 
-        {/* Settings Button */}
-        <button
-          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-          className="p-1.5 hover:bg-secondary rounded-lg transition-colors flex-shrink-0"
-          aria-label="Open settings"
-        >
-          <Settings className="w-5 h-5 text-foreground" />
-        </button>
+        {/* User Actions */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            className="p-1.5 hover:bg-secondary rounded-lg transition-colors"
+            aria-label="Start call"
+          >
+            <Phone className="w-5 h-5 text-foreground" />
+          </button>
+          <button
+            className="p-1.5 hover:bg-secondary rounded-lg transition-colors"
+            aria-label="View profile"
+          >
+            <User className="w-5 h-5 text-foreground" />
+          </button>
+        </div>
       </div>
-
-      {/* Settings Panel */}
-      <SettingsPanel isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
 
       {/* Encryption Banner */}
       <EncryptionBanner />

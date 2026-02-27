@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { Pin, BellOff } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import type { Room } from '@/types/chat';
 
@@ -47,21 +47,22 @@ export default function ChatListItem({
   };
 
   return (
-    <motion.button
+    <button
       onClick={onSelect}
-      whileHover={{ backgroundColor: 'rgba(204, 255, 0, 0.05)' }}
-      whileTap={{ scale: 0.98 }}
       className={`w-full px-3 py-3 rounded-lg flex items-start gap-3 transition-colors ${
         isActive ? 'bg-secondary' : 'hover:bg-secondary/50'
       }`}
     >
-      {/* Avatar */}
-      <div className="flex-shrink-0">
+      {/* Avatar with Online Indicator */}
+      <div className="flex-shrink-0 relative">
         <Avatar className="h-10 w-10 border border-border">
           <AvatarFallback className="bg-accent text-accent-foreground font-semibold text-xs">
             {initials}
           </AvatarFallback>
         </Avatar>
+        {otherParticipant?.isOnline && (
+          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-background" />
+        )}
       </div>
 
       {/* Content */}
@@ -82,14 +83,20 @@ export default function ChatListItem({
         )}
       </div>
 
+      {/* Pinned and Muted Icons */}
+      <div className="flex items-center gap-1 flex-shrink-0">
+        {room.isPinned && (
+          <Pin className="w-4 h-4 text-accent" />
+        )}
+        {room.isMuted && (
+          <BellOff className="w-4 h-4 text-muted-foreground" />
+        )}
+      </div>
+
       {/* Active Indicator */}
       {isActive && (
-        <motion.div
-          layoutId="activeIndicator"
-          className="absolute left-0 w-1 h-10 bg-accent rounded-r"
-          transition={{ duration: 0.2 }}
-        />
+        <div className="absolute left-0 w-1 h-10 bg-accent rounded-r" />
       )}
-    </motion.button>
+    </button>
   );
 }
