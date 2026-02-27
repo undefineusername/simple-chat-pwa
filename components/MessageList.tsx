@@ -32,11 +32,12 @@ export default function MessageList({ messages }: MessageListProps) {
   }, [messages]);
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
+    // Use UTC offset to ensure consistent formatting across server and client
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    const displayHours = date.getHours() % 12 || 12;
+    return `${String(displayHours).padStart(2, '0')}:${minutes} ${ampm}`;
   };
 
   return (
