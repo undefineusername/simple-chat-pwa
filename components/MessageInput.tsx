@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 import { Send, Plus } from 'lucide-react';
 
 interface MessageInputProps {
-  onSendMessage: (text: string) => void;
+  onSend: (text: string) => void;
 }
 
-export default function MessageInput({ onSendMessage }: MessageInputProps) {
+export default function MessageInput({ onSend }: MessageInputProps) {
   const [message, setMessage] = useState('');
   const [rows, setRows] = useState(1);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -39,7 +39,7 @@ export default function MessageInput({ onSendMessage }: MessageInputProps) {
 
   const handleSend = () => {
     if (message.trim()) {
-      onSendMessage(message.trim());
+      onSend(message.trim());
       setMessage('');
       setRows(1);
       if (textareaRef.current) {
