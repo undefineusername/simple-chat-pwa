@@ -20,8 +20,8 @@ export default function MessageBubble({
   return (
     <div
       className={`relative px-4 py-3 rounded-2xl ${isUser
-          ? 'bg-accent text-accent-foreground rounded-br-none'
-          : 'bg-secondary text-foreground rounded-bl-none'
+        ? 'bg-accent text-accent-foreground rounded-br-none'
+        : 'bg-secondary text-foreground rounded-bl-none'
         }`}
     >
       <p className="text-base leading-relaxed break-words">{text}</p>
@@ -30,7 +30,7 @@ export default function MessageBubble({
         {isUser && (
           <>
             {status === 'read' ? (
-              <Check2 className="w-3 h-3 text-accent-foreground/80" />
+              <CheckCheck className="w-3 h-3 text-accent-foreground/80" />
             ) : (
               <Check className="w-3 h-3 text-accent-foreground/80" />
             )}
