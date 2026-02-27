@@ -30,20 +30,19 @@ export default function ChatListItem({
   const getTimeString = (date: Date) => {
     const now = new Date();
     const isToday =
-      date.getDate() === now.getDate() &&
-      date.getMonth() === now.getMonth() &&
-      date.getFullYear() === now.getFullYear();
+      date.getUTCDate() === now.getUTCDate() &&
+      date.getUTCMonth() === now.getUTCMonth() &&
+      date.getUTCFullYear() === now.getUTCFullYear();
 
     if (isToday) {
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const hours = String(date.getUTCHours()).padStart(2, '0');
+      const minutes = String(date.getUTCMinutes()).padStart(2, '0');
       return `${hours}:${minutes}`;
     }
 
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    return `${month}/${day}`;
   };
 
   return (
