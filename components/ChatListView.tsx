@@ -33,7 +33,7 @@ export default function ChatListView({
     <div className="h-full w-full flex flex-col bg-background relative">
       {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Chats</h1>
+        <h1 className="text-xl font-semibold text-foreground">Simple_Chat</h1>
         <button
           onClick={() => setIsSettingsOpen(!isSettingsOpen)}
           className="p-1.5 hover:bg-secondary rounded-lg transition-colors flex-shrink-0"
