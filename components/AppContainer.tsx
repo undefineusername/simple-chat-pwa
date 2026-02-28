@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import ChatLayout from './ChatLayout';
 import ChatListView from './ChatListView';
@@ -10,11 +10,28 @@ interface AppContainerProps {
   rooms: Room[];
 }
 
-export default function AppContainer({ rooms }: AppContainerProps) {
+export default function AppContainer({ rooms: initialRooms }: AppContainerProps) {
+  const [rooms, setRooms] = useState<Room[]>(initialRooms);
   const [activeRoomId, setActiveRoomId] = useState<string>(rooms[0]?.id || '');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const activeRoom = rooms.find((r) => r.id === activeRoomId) || rooms[0];
+
+  const handleTogglePin = useCallback((roomId: string) => {
+    setRooms((prev) =>
+      prev.map((r) =>
+        r.id === roomId ? { ...r, isPinned: !r.isPinned } : r
+      )
+    );
+  }, []);
+
+  const handleToggleMute = useCallback((roomId: string) => {
+    setRooms((prev) =>
+      prev.map((r) =>
+        r.id === roomId ? { ...r, isMuted: !r.isMuted } : r
+      )
+    );
+  }, []);
 
   return (
     <div className="h-screen w-full bg-background flex overflow-hidden">
@@ -27,6 +44,8 @@ export default function AppContainer({ rooms }: AppContainerProps) {
               rooms={rooms}
               activeRoomId={activeRoomId}
               onSelectRoom={setActiveRoomId}
+              onTogglePin={handleTogglePin}
+              onToggleMute={handleToggleMute}
             />
           </div>
 
@@ -46,6 +65,8 @@ export default function AppContainer({ rooms }: AppContainerProps) {
                 rooms={rooms}
                 activeRoomId={activeRoomId}
                 onSelectRoom={setActiveRoomId}
+                onTogglePin={handleTogglePin}
+                onToggleMute={handleToggleMute}
               />
             </div>
           ) : (

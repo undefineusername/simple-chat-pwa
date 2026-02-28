@@ -11,22 +11,36 @@ interface ChatListViewProps {
   rooms: Room[];
   activeRoomId: string;
   onSelectRoom: (roomId: string) => void;
+  onTogglePin: (roomId: string) => void;
+  onToggleMute: (roomId: string) => void;
 }
 
 export default function ChatListView({
   rooms,
   activeRoomId,
   onSelectRoom,
+  onTogglePin,
+  onToggleMute,
 }: ChatListViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const filteredRooms = useMemo(() => {
-    if (!searchQuery) return rooms;
-    const query = searchQuery.toLowerCase();
-    return rooms.filter((room) =>
-      room.participants[0]?.name.toLowerCase().includes(query)
-    );
+    let result = rooms;
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((room) =>
+        room.participants[0]?.name.toLowerCase().includes(query)
+      );
+    }
+    // Sort: pinned first, then by lastMessageAt descending
+    return [...result].sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+      return bTime - aTime;
+    });
   }, [rooms, searchQuery]);
 
   return (
@@ -67,6 +81,8 @@ export default function ChatListView({
                 room={room}
                 isActive={activeRoomId === room.id}
                 onSelect={() => onSelectRoom(room.id)}
+                onTogglePin={() => onTogglePin(room.id)}
+                onToggleMute={() => onToggleMute(room.id)}
               />
             ))
           )}
