@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Settings } from 'lucide-react';
 import ChatListItem from './ChatListItem';
 import ChatListSearch from './ChatListSearch';
 import SettingsPanel from './SettingsPanel';
+import UserStatusBar from './UserStatusBar';
 import type { Room } from '@/types/chat';
 
 interface ChatListViewProps {
@@ -48,13 +48,6 @@ export default function ChatListView({
       {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <h1 className="text-xl font-semibold text-foreground">Simple_Chat</h1>
-        <button
-          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-          className="p-1.5 hover:bg-secondary rounded-lg transition-colors flex-shrink-0"
-          aria-label="Open settings"
-        >
-          <Settings className="w-5 h-5 text-foreground" />
-        </button>
       </div>
 
       {/* Settings Panel */}
@@ -88,6 +81,9 @@ export default function ChatListView({
           )}
         </div>
       </div>
+
+      {/* User Status Bar - Discord style bottom bar */}
+      <UserStatusBar onOpenSettings={() => setIsSettingsOpen(true)} />
     </div>
   );
 }
