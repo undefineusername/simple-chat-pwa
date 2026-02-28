@@ -1,32 +1,46 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Settings } from 'lucide-react';
 import ChatListItem from './ChatListItem';
 import ChatListSearch from './ChatListSearch';
 import SettingsPanel from './SettingsPanel';
+import UserStatusBar from './UserStatusBar';
 import type { Room } from '@/types/chat';
 
 interface ChatListViewProps {
   rooms: Room[];
   activeRoomId: string;
   onSelectRoom: (roomId: string) => void;
+  onTogglePin: (roomId: string) => void;
+  onToggleMute: (roomId: string) => void;
 }
 
 export default function ChatListView({
   rooms,
   activeRoomId,
   onSelectRoom,
+  onTogglePin,
+  onToggleMute,
 }: ChatListViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const filteredRooms = useMemo(() => {
-    if (!searchQuery) return rooms;
-    const query = searchQuery.toLowerCase();
-    return rooms.filter((room) =>
-      room.participants[0]?.name.toLowerCase().includes(query)
-    );
+    let result = rooms;
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((room) =>
+        room.participants[0]?.name.toLowerCase().includes(query)
+      );
+    }
+    // Sort: pinned first, then by lastMessageAt descending
+    return [...result].sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+      return bTime - aTime;
+    });
   }, [rooms, searchQuery]);
 
   return (
@@ -34,13 +48,6 @@ export default function ChatListView({
       {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <h1 className="text-xl font-semibold text-foreground">Simple_Chat</h1>
-        <button
-          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-          className="p-1.5 hover:bg-secondary rounded-lg transition-colors flex-shrink-0"
-          aria-label="Open settings"
-        >
-          <Settings className="w-5 h-5 text-foreground" />
-        </button>
       </div>
 
       {/* Settings Panel */}
@@ -67,11 +74,16 @@ export default function ChatListView({
                 room={room}
                 isActive={activeRoomId === room.id}
                 onSelect={() => onSelectRoom(room.id)}
+                onTogglePin={() => onTogglePin(room.id)}
+                onToggleMute={() => onToggleMute(room.id)}
               />
             ))
           )}
         </div>
       </div>
+
+      {/* User Status Bar - Discord style bottom bar */}
+      <UserStatusBar onOpenSettings={() => setIsSettingsOpen(true)} />
     </div>
   );
 }

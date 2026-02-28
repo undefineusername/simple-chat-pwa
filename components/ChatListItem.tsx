@@ -1,6 +1,7 @@
 'use client';
 
-import { Pin, BellOff } from 'lucide-react';
+import { useState, useRef, useCallback } from 'react';
+import { Pin, BellOff, Bell, Trash2, X } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import type { Room } from '@/types/chat';
 
@@ -8,13 +9,19 @@ interface ChatListItemProps {
   room: Room;
   isActive: boolean;
   onSelect: () => void;
+  onTogglePin: () => void;
+  onToggleMute: () => void;
 }
 
 export default function ChatListItem({
   room,
   isActive,
   onSelect,
+  onTogglePin,
+  onToggleMute,
 }: ChatListItemProps) {
+  const [showMenu, setShowMenu] = useState(false);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const otherParticipant = room.participants[0];
   const lastMessage = room.messages[room.messages.length - 1];
   const initials = otherParticipant?.name
@@ -45,57 +52,121 @@ export default function ChatListItem({
     return `${month}/${day}`;
   };
 
-  return (
-    <button
-      onClick={onSelect}
-      className={`w-full px-3 py-3 rounded-lg flex items-start gap-3 transition-colors ${
-        isActive ? 'bg-secondary' : 'hover:bg-secondary/50'
-      }`}
-    >
-      {/* Avatar with Online Indicator */}
-      <div className="flex-shrink-0 relative">
-        <Avatar className="h-10 w-10 border border-border">
-          <AvatarFallback className="bg-accent text-accent-foreground font-semibold text-xs">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
-        {otherParticipant?.isOnline && (
-          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-background" />
-        )}
-      </div>
+  const handleTouchStart = useCallback(() => {
+    longPressTimer.current = setTimeout(() => {
+      setShowMenu(true);
+    }, 500);
+  }, []);
 
-      {/* Content */}
-      <div className="flex-1 min-w-0 text-left">
-        <div className="flex items-baseline justify-between gap-2 mb-1">
-          <h3 className="text-sm font-medium text-foreground truncate">
-            {otherParticipant?.name}
-          </h3>
-          <span className="text-xs text-muted-foreground flex-shrink-0">
-            {lastMessage ? getTimeString(new Date(lastMessage.timestamp)) : ''}
-          </span>
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowMenu(true);
+  }, []);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => { if (!showMenu) onSelect(); }}
+        onContextMenu={handleContextMenu}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        className={`w-full px-3 py-3 rounded-lg flex items-start gap-3 transition-colors ${
+          isActive ? 'bg-secondary' : 'hover:bg-secondary/50'
+        }`}
+      >
+        {/* Avatar with Online Indicator */}
+        <div className="flex-shrink-0 relative">
+          <Avatar className="h-10 w-10 border border-border">
+            <AvatarFallback className="bg-accent text-accent-foreground font-semibold text-xs">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+          {otherParticipant?.isOnline && (
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-background" />
+          )}
         </div>
 
-        {lastMessage && (
-          <p className="text-xs text-muted-foreground truncate">
-            {formatPreview(lastMessage.text)}
-          </p>
-        )}
-      </div>
+        {/* Content */}
+        <div className="flex-1 min-w-0 text-left">
+          <div className="flex items-baseline justify-between gap-2 mb-1">
+            <h3 className="text-sm font-medium text-foreground truncate">
+              {otherParticipant?.name}
+            </h3>
+            <span className="text-xs text-muted-foreground flex-shrink-0">
+              {lastMessage ? getTimeString(new Date(lastMessage.timestamp)) : ''}
+            </span>
+          </div>
 
-      {/* Pinned and Muted Icons */}
-      <div className="flex items-center gap-1 flex-shrink-0">
-        {room.isPinned && (
-          <Pin className="w-4 h-4 text-accent" />
-        )}
-        {room.isMuted && (
-          <BellOff className="w-4 h-4 text-muted-foreground" />
-        )}
-      </div>
+          {lastMessage && (
+            <p className="text-xs text-muted-foreground truncate">
+              {formatPreview(lastMessage.text)}
+            </p>
+          )}
+        </div>
 
-      {/* Active Indicator */}
-      {isActive && (
-        <div className="absolute left-0 w-1 h-10 bg-accent rounded-r" />
+        {/* Pinned and Muted Icons */}
+        <div className="flex items-center gap-1 flex-shrink-0 pt-1">
+          {room.isPinned && (
+            <Pin className="w-3.5 h-3.5 text-accent" />
+          )}
+          {room.isMuted && (
+            <BellOff className="w-3.5 h-3.5 text-muted-foreground" />
+          )}
+        </div>
+      </button>
+
+      {/* Context Menu */}
+      {showMenu && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setShowMenu(false)}
+          />
+          {/* Menu */}
+          <div className="absolute right-2 top-0 z-50 bg-card border border-border rounded-lg shadow-lg overflow-hidden min-w-40">
+            <button
+              onClick={(e) => { e.stopPropagation(); onTogglePin(); setShowMenu(false); }}
+              className="w-full px-4 py-2.5 text-sm text-foreground hover:bg-secondary flex items-center gap-3 transition-colors"
+            >
+              <Pin className="w-4 h-4" />
+              {room.isPinned ? 'Unpin' : 'Pin'}
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onToggleMute(); setShowMenu(false); }}
+              className="w-full px-4 py-2.5 text-sm text-foreground hover:bg-secondary flex items-center gap-3 transition-colors"
+            >
+              {room.isMuted ? (
+                <>
+                  <Bell className="w-4 h-4" />
+                  Unmute
+                </>
+              ) : (
+                <>
+                  <BellOff className="w-4 h-4" />
+                  Mute
+                </>
+              )}
+            </button>
+            <div className="border-t border-border" />
+            <button
+              onClick={() => setShowMenu(false)}
+              className="w-full px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary flex items-center gap-3 transition-colors"
+            >
+              <X className="w-4 h-4" />
+              Cancel
+            </button>
+          </div>
+        </>
       )}
-    </button>
+    </div>
   );
 }
