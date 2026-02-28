@@ -23,11 +23,10 @@ export default function MessageList({ messages }: MessageListProps) {
   }, [messages]);
 
   const formatTime = (date: Date) => {
-    // Use UTC offset to ensure consistent formatting across server and client
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
-    const displayHours = date.getHours() % 12 || 12;
+    const hours = date.getUTCHours();
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
     return `${String(displayHours).padStart(2, '0')}:${minutes} ${ampm}`;
   };
 

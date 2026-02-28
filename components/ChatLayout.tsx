@@ -68,7 +68,7 @@ export default function ChatLayout({ room, onBack }: ChatLayoutProps) {
       <MessageList messages={room.messages} />
 
       {/* Input */}
-      <MessageInput onSend={handleSendMessage} />
+      <MessageInput onSend={handleSendMessage} autoFocus={isMobile} />
     </div>
   );
 }
