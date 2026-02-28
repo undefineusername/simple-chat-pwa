@@ -11,12 +11,16 @@ interface ChatListViewProps {
   rooms: Room[];
   activeRoomId: string;
   onSelectRoom: (roomId: string) => void;
+  onTogglePin?: (roomId: string, isPinned: boolean) => void;
+  onToggleMute?: (roomId: string, isMuted: boolean) => void;
 }
 
 export default function ChatListView({
   rooms,
   activeRoomId,
   onSelectRoom,
+  onTogglePin,
+  onToggleMute,
 }: ChatListViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -67,6 +71,8 @@ export default function ChatListView({
                 room={room}
                 isActive={activeRoomId === room.id}
                 onSelect={() => onSelectRoom(room.id)}
+                onTogglePin={onTogglePin}
+                onToggleMute={onToggleMute}
               />
             ))
           )}

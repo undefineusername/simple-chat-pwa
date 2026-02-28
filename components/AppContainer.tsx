@@ -44,6 +44,24 @@ export default function AppContainer({ rooms: initialRooms }: AppContainerProps)
     console.log('[v0] Chat deleted:', roomId);
   };
 
+  const handleTogglePin = (roomId: string, isPinned: boolean) => {
+    setRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room.id === roomId ? { ...room, isPinned } : room
+      )
+    );
+    console.log('[v0] Chat pinned:', roomId, isPinned);
+  };
+
+  const handleToggleMute = (roomId: string, isMuted: boolean) => {
+    setRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room.id === roomId ? { ...room, isMuted } : room
+      )
+    );
+    console.log('[v0] Chat muted:', roomId, isMuted);
+  };
+
   return (
     <div className="h-screen w-full bg-background flex overflow-hidden">
       {/* Desktop: Split View */}
@@ -55,6 +73,8 @@ export default function AppContainer({ rooms: initialRooms }: AppContainerProps)
               rooms={rooms}
               activeRoomId={activeRoomId}
               onSelectRoom={setActiveRoomId}
+              onTogglePin={handleTogglePin}
+              onToggleMute={handleToggleMute}
             />
           </div>
 
@@ -80,6 +100,8 @@ export default function AppContainer({ rooms: initialRooms }: AppContainerProps)
                 rooms={rooms}
                 activeRoomId={activeRoomId}
                 onSelectRoom={setActiveRoomId}
+                onTogglePin={handleTogglePin}
+                onToggleMute={handleToggleMute}
               />
             </div>
           ) : (

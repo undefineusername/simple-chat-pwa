@@ -1,19 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { Pin, BellOff } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Room } from '@/types/chat';
 
 interface ChatListItemProps {
   room: Room;
   isActive: boolean;
   onSelect: () => void;
+  onTogglePin?: (roomId: string, isPinned: boolean) => void;
+  onToggleMute?: (roomId: string, isMuted: boolean) => void;
 }
 
 export default function ChatListItem({
   room,
   isActive,
   onSelect,
+  onTogglePin,
+  onToggleMute,
 }: ChatListItemProps) {
   const otherParticipant = room.participants[0];
   const lastMessage = room.messages[room.messages.length - 1];
@@ -22,6 +27,16 @@ export default function ChatListItem({
     .map((n) => n[0])
     .join('')
     .toUpperCase();
+
+  const handlePinClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onTogglePin?.(room.id, !room.isPinned);
+  };
+
+  const handleMuteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onToggleMute?.(room.id, !room.isMuted);
+  };
 
   const formatPreview = (text: string) => {
     return text.length > 45 ? text.substring(0, 45) + '...' : text;
@@ -55,6 +70,7 @@ export default function ChatListItem({
       {/* Avatar with Online Indicator */}
       <div className="flex-shrink-0 relative">
         <Avatar className="h-10 w-10 border border-border">
+          <AvatarImage src={otherParticipant?.avatar} />
           <AvatarFallback className="bg-accent text-accent-foreground font-semibold text-xs">
             {initials}
           </AvatarFallback>
@@ -84,12 +100,28 @@ export default function ChatListItem({
 
       {/* Pinned and Muted Icons */}
       <div className="flex items-center gap-1 flex-shrink-0">
-        {room.isPinned && (
-          <Pin className="w-4 h-4 text-accent" />
-        )}
-        {room.isMuted && (
-          <BellOff className="w-4 h-4 text-muted-foreground" />
-        )}
+        <button
+          onClick={handlePinClick}
+          className={`p-1 rounded transition-colors ${
+            room.isPinned
+              ? 'text-accent hover:bg-accent/10'
+              : 'text-muted-foreground hover:bg-secondary'
+          }`}
+          aria-label={room.isPinned ? 'Unpin chat' : 'Pin chat'}
+        >
+          <Pin className="w-4 h-4" />
+        </button>
+        <button
+          onClick={handleMuteClick}
+          className={`p-1 rounded transition-colors ${
+            room.isMuted
+              ? 'text-accent hover:bg-accent/10'
+              : 'text-muted-foreground hover:bg-secondary'
+          }`}
+          aria-label={room.isMuted ? 'Unmute notifications' : 'Mute notifications'}
+        >
+          <BellOff className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Active Indicator */}
