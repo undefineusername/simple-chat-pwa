@@ -10,11 +10,39 @@ interface AppContainerProps {
   rooms: Room[];
 }
 
-export default function AppContainer({ rooms }: AppContainerProps) {
-  const [activeRoomId, setActiveRoomId] = useState<string>(rooms[0]?.id || '');
+export default function AppContainer({ rooms: initialRooms }: AppContainerProps) {
+  const [activeRoomId, setActiveRoomId] = useState<string>(
+    initialRooms[0]?.id || ''
+  );
+  const [rooms, setRooms] = useState<Room[]>(initialRooms);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const activeRoom = rooms.find((r) => r.id === activeRoomId) || rooms[0];
+
+  const handleBlockUser = (userId: string) => {
+    // Mark the room as blocked and update the chat list
+    setRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room.participants[0]?.id === userId
+          ? { ...room, isBlocked: true }
+          : room
+      )
+    );
+    console.log('[v0] User blocked:', userId);
+  };
+
+  const handleDeleteChat = (roomId: string) => {
+    // Remove the room from the list
+    setRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId));
+    
+    // If the deleted room was active, switch to the first available room
+    if (activeRoomId === roomId) {
+      const remainingRooms = rooms.filter((room) => room.id !== roomId);
+      setActiveRoomId(remainingRooms[0]?.id || '');
+    }
+    
+    console.log('[v0] Chat deleted:', roomId);
+  };
 
   return (
     <div className="h-screen w-full bg-background flex overflow-hidden">
@@ -32,7 +60,13 @@ export default function AppContainer({ rooms }: AppContainerProps) {
 
           {/* Active Chat - Right Content */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {activeRoom && <ChatLayout room={activeRoom} />}
+            {activeRoom && (
+              <ChatLayout
+                room={activeRoom}
+                onBlockUser={handleBlockUser}
+                onDeleteChat={handleDeleteChat}
+              />
+            )}
           </div>
         </>
       )}
@@ -54,6 +88,8 @@ export default function AppContainer({ rooms }: AppContainerProps) {
                 <ChatLayout
                   room={activeRoom}
                   onBack={() => setActiveRoomId('')}
+                  onBlockUser={handleBlockUser}
+                  onDeleteChat={handleDeleteChat}
                 />
               )}
             </div>

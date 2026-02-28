@@ -4,6 +4,8 @@ export interface Message {
   text: string;
   timestamp: string | Date;
   status: 'sending' | 'sent' | 'delivered' | 'read';
+  replyTo?: string; // ID of the message being replied to
+  isDeleted?: boolean;
 }
 
 export interface Participant {
@@ -21,4 +23,5 @@ export interface Room {
   lastMessageAt?: Date;
   isPinned?: boolean;
   isMuted?: boolean;
+  isBlocked?: boolean;
 }

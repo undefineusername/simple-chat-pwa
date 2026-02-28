@@ -11,7 +11,7 @@ export default function Home() {
         {
           id: 'user-1',
           name: 'Alex Johnson',
-          avatar: undefined,
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
           isOnline: true,
         },
       ],
@@ -56,7 +56,7 @@ export default function Home() {
         {
           id: 'user-2',
           name: 'Sarah Davis',
-          avatar: undefined,
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
           isOnline: false,
         },
       ],
@@ -87,7 +87,7 @@ export default function Home() {
         {
           id: 'user-3',
           name: 'Michael Chen',
-          avatar: undefined,
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
           isOnline: true,
         },
       ],
@@ -118,7 +118,7 @@ export default function Home() {
         {
           id: 'user-4',
           name: 'Emma Wilson',
-          avatar: undefined,
+          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma',
           isOnline: true,
         },
       ],
