@@ -1,8 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Pin, BellOff } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import type { Room } from '@/types/chat';
 
 interface ChatListItemProps {
@@ -27,15 +34,38 @@ export default function ChatListItem({
     .map((n) => n[0])
     .join('')
     .toUpperCase();
+  
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const longPressTimer = useRef<NodeJS.Timeout>();
+  const itemRef = useRef<HTMLDivElement>(null);
 
-  const handlePinClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handlePinToggle = () => {
     onTogglePin?.(room.id, !room.isPinned);
+    setShowContextMenu(false);
   };
 
-  const handleMuteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleMuteToggle = () => {
     onToggleMute?.(room.id, !room.isMuted);
+    setShowContextMenu(false);
+  };
+
+  const handleLongPress = () => {
+    setShowContextMenu(true);
+  };
+
+  const handleTouchStart = () => {
+    longPressTimer.current = setTimeout(handleLongPress, 500);
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+    }
+  };
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowContextMenu(true);
   };
 
   const formatPreview = (text: string) => {
@@ -61,12 +91,18 @@ export default function ChatListItem({
   };
 
   return (
-    <button
-      onClick={onSelect}
-      className={`w-full px-3 py-3 rounded-lg flex items-start gap-3 transition-colors ${
-        isActive ? 'bg-secondary' : 'hover:bg-secondary/50'
-      }`}
-    >
+    <DropdownMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
+      <DropdownMenuTrigger asChild>
+        <button
+          ref={itemRef}
+          onClick={onSelect}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onContextMenu={handleContextMenu}
+          className={`w-full px-3 py-3 rounded-lg flex items-start gap-3 transition-colors ${
+            isActive ? 'bg-secondary' : 'hover:bg-secondary/50'
+          }`}
+        >
       {/* Avatar with Online Indicator */}
       <div className="flex-shrink-0 relative">
         <Avatar className="h-10 w-10 border border-border">
@@ -98,36 +134,22 @@ export default function ChatListItem({
         )}
       </div>
 
-      {/* Pinned and Muted Icons */}
-      <div className="flex items-center gap-1 flex-shrink-0">
-        <button
-          onClick={handlePinClick}
-          className={`p-1 rounded transition-colors ${
-            room.isPinned
-              ? 'text-accent hover:bg-accent/10'
-              : 'text-muted-foreground hover:bg-secondary'
-          }`}
-          aria-label={room.isPinned ? 'Unpin chat' : 'Pin chat'}
-        >
-          <Pin className="w-4 h-4" />
-        </button>
-        <button
-          onClick={handleMuteClick}
-          className={`p-1 rounded transition-colors ${
-            room.isMuted
-              ? 'text-accent hover:bg-accent/10'
-              : 'text-muted-foreground hover:bg-secondary'
-          }`}
-          aria-label={room.isMuted ? 'Unmute notifications' : 'Mute notifications'}
-        >
-          <BellOff className="w-4 h-4" />
-        </button>
-      </div>
-
       {/* Active Indicator */}
       {isActive && (
-        <div className="absolute left-0 w-1 h-10 bg-accent rounded-r" />
+        <div className="absolute left-0 top-0 w-1 h-full bg-accent rounded-r" />
       )}
-    </button>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuItem onClick={handlePinToggle}>
+          <Pin className="w-4 h-4 mr-2" />
+          <span>{room.isPinned ? 'Unpin' : 'Pin'}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleMuteToggle}>
+          <BellOff className="w-4 h-4 mr-2" />
+          <span>{room.isMuted ? 'Unmute' : 'Mute'}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

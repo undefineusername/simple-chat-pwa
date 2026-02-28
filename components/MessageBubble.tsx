@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Check, CheckCheck, Trash2, Reply } from 'lucide-react';
 import {
   DropdownMenu,
@@ -32,10 +32,41 @@ export default function MessageBubble({
 }: MessageBubbleProps) {
   const isUser = sender === 'user';
   const [showMenu, setShowMenu] = useState(false);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const longPressTimer = useRef<NodeJS.Timeout>();
+  const bubbleRef = useRef<HTMLDivElement>(null);
+
+  const handleLongPress = () => {
+    if (!isDeleted) {
+      setShowMenu(true);
+    }
+  };
+
+  const handleTouchStart = () => {
+    longPressTimer.current = setTimeout(handleLongPress, 500);
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+    }
+  };
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isDeleted) {
+      setContextMenu({ x: e.clientX, y: e.clientY });
+      setShowMenu(true);
+    }
+  };
 
   return (
     <div
-      className={`group relative px-4 py-3 rounded-2xl ${
+      ref={bubbleRef}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onContextMenu={handleContextMenu}
+      className={`relative px-4 py-3 rounded-2xl select-none ${
         isUser
           ? 'bg-accent text-accent-foreground rounded-br-none'
           : 'bg-secondary text-foreground rounded-bl-none'
@@ -69,31 +100,24 @@ export default function MessageBubble({
         </>
       )}
 
-      {/* Message Actions */}
+      {/* Context Menu */}
       {!isDeleted && (
         <DropdownMenu open={showMenu} onOpenChange={setShowMenu}>
           <DropdownMenuTrigger asChild>
-            <button
-              className="absolute -right-10 top-0 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity rounded hover:bg-secondary"
-              aria-label="Message actions"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M10.5 1.5H9.5V3.5H10.5V1.5ZM10.5 8.5H9.5V10.5H10.5V8.5ZM10.5 15.5H9.5V17.5H10.5V15.5Z" />
-              </svg>
-            </button>
+            <div />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem onClick={() => onReply?.(id)}>
+          <DropdownMenuContent 
+            align="start" 
+            className="w-32"
+            style={contextMenu ? { position: 'fixed', left: contextMenu.x, top: contextMenu.y } : undefined}
+          >
+            <DropdownMenuItem onClick={() => { onReply?.(id); setShowMenu(false); }}>
               <Reply className="w-4 h-4 mr-2" />
               <span>Reply</span>
             </DropdownMenuItem>
             {isUser && (
               <DropdownMenuItem
-                onClick={() => onDelete?.(id)}
+                onClick={() => { onDelete?.(id); setShowMenu(false); }}
                 className="text-destructive focus:text-destructive"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
