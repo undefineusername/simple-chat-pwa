@@ -183,7 +183,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             <div className="p-5 space-y-5">
               {/* Avatar Picker */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wide">Avatar</label>
+                <label className="block font-bold text-muted-foreground mb-3 uppercase tracking-wide text-sm">Avatar</label>
                 <div className="flex items-center gap-4">
                   <Avatar className="h-20 w-20 border-2 border-accent flex-shrink-0">
                     <AvatarFallback className="bg-accent text-accent-foreground font-bold text-2xl">
@@ -210,7 +210,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
               {/* Display Name */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-2.5 uppercase tracking-wide">Name</label>
+                <label className="block font-bold text-muted-foreground mb-2.5 uppercase tracking-wide text-sm">Name</label>
                 {editingName ? (
                   <div className="flex gap-2">
                     <input
@@ -238,7 +238,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
               {/* Status Message */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-2.5 uppercase tracking-wide">Status</label>
+                <label className="block font-bold text-muted-foreground mb-2.5 uppercase tracking-wide text-sm">Status</label>
                 {editingStatus ? (
                   <div className="flex gap-2">
                     <input
@@ -267,7 +267,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
               {/* Online Status */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-2.5 uppercase tracking-wide">Status</label>
+                <label className="block font-bold text-muted-foreground mb-2.5 uppercase tracking-wide text-sm">Status</label>
                 <div className="space-y-1">
                   {ONLINE_STATUSES.map((s) => (
                     <button
@@ -296,7 +296,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             <div className="p-5 space-y-6">
               {/* Theme */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wide">Theme</label>
+                <label className="block font-bold text-muted-foreground mb-3 uppercase tracking-wide text-sm">Theme</label>
                 <div className="space-y-2">
                   {THEMES.map((t) => (
                     <button
@@ -316,7 +316,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
               {/* Accent Color */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wide">Accent Color</label>
+                <label className="block font-bold text-muted-foreground mb-3 uppercase tracking-wide text-sm">Accent Color</label>
                 <div className="grid grid-cols-3 gap-3">
                   {ACCENT_COLORS.map((c) => (
                     <button
@@ -338,7 +338,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
               {/* Text Size */}
               <div>
-                <label className="block text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wide">Text Size</label>
+                <label className="block font-bold text-muted-foreground mb-3 uppercase tracking-wide text-sm">Text Size</label>
                 <div className="flex gap-2">
                   {TEXT_SIZES.map((s) => (
                     <button

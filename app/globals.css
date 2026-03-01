@@ -196,16 +196,21 @@
 
 /* Text Size Scaling */
 [data-text-size='small'] {
-  font-size: 13px;
+  font-size: 12px !important;
   line-height: 1.4;
 }
 
 [data-text-size='medium'] {
-  font-size: 15px;
+  font-size: 16px !important;
   line-height: 1.5;
 }
 
 [data-text-size='large'] {
-  font-size: 17px;
+  font-size: 22px !important;
   line-height: 1.6;
+}
+
+/* Ensure text elements respect parent font-size */
+[data-text-size] * {
+  font-size: inherit;
 }
