@@ -196,16 +196,16 @@
 
 /* Text Size Scaling */
 [data-text-size='small'] {
-  font-size: calc(14px * 0.9);
-  line-height: calc(1.5 * 0.9);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 [data-text-size='medium'] {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
 [data-text-size='large'] {
-  font-size: calc(14px * 1.1);
-  line-height: calc(1.5 * 1.1);
+  font-size: 17px;
+  line-height: 1.6;
 }
