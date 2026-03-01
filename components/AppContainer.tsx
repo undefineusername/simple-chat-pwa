@@ -12,6 +12,7 @@ interface AppContainerProps {
 
 export default function AppContainer({ rooms: initialRooms }: AppContainerProps) {
   const [rooms, setRooms] = useState<Room[]>(initialRooms);
+  const [blockedUsers, setBlockedUsers] = useState<string[]>([]);
   const [activeRoomId, setActiveRoomId] = useState<string>(rooms[0]?.id || '');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -33,6 +34,17 @@ export default function AppContainer({ rooms: initialRooms }: AppContainerProps)
     );
   }, []);
 
+  const handleLeaveChat = useCallback((roomId: string) => {
+    setRooms((prev) => prev.filter((r) => r.id !== roomId));
+    setActiveRoomId('');
+  }, []);
+
+  const handleBlockUser = useCallback((userId: string) => {
+    setBlockedUsers((prev) => [...prev, userId]);
+    setRooms((prev) => prev.filter((r) => r.participants[0]?.id !== userId));
+    setActiveRoomId('');
+  }, []);
+
   return (
     <div className="h-screen w-full bg-background flex overflow-hidden">
       {/* Desktop: Split View */}
@@ -51,7 +63,13 @@ export default function AppContainer({ rooms: initialRooms }: AppContainerProps)
 
           {/* Active Chat - Right Content */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {activeRoom && <ChatLayout room={activeRoom} />}
+            {activeRoom && (
+              <ChatLayout
+                room={activeRoom}
+                onLeaveChat={handleLeaveChat}
+                onBlockUser={handleBlockUser}
+              />
+            )}
           </div>
         </>
       )}
@@ -75,6 +93,8 @@ export default function AppContainer({ rooms: initialRooms }: AppContainerProps)
                 <ChatLayout
                   room={activeRoom}
                   onBack={() => setActiveRoomId('')}
+                  onLeaveChat={handleLeaveChat}
+                  onBlockUser={handleBlockUser}
                 />
               )}
             </div>

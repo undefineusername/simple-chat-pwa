@@ -1,23 +1,46 @@
 'use client';
 
+import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
+import ChatRoomMenu from './ChatRoomMenu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import type { Room } from '@/types/chat';
 
 interface ChatLayoutProps {
   room: Room;
   onBack?: () => void;
+  onLeaveChat?: (roomId: string) => void;
+  onBlockUser?: (userId: string) => void;
 }
 
-export default function ChatLayout({ room, onBack }: ChatLayoutProps) {
+export default function ChatLayout({ room, onBack, onLeaveChat, onBlockUser }: ChatLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const [showMenu, setShowMenu] = useState(false);
   const otherParticipant = room.participants[0];
 
   const handleSendMessage = (text: string) => {
     console.log('[v0] Sending message:', text);
+  };
+
+  const handleLeaveChat = () => {
+    if (onLeaveChat) {
+      onLeaveChat(room.id);
+    }
+    if (onBack) {
+      onBack();
+    }
+  };
+
+  const handleBlockUser = () => {
+    if (onBlockUser && otherParticipant) {
+      onBlockUser(otherParticipant.id);
+    }
+    if (onBack) {
+      onBack();
+    }
   };
 
   return (
@@ -50,12 +73,22 @@ export default function ChatLayout({ room, onBack }: ChatLayoutProps) {
 
         {/* Info button */}
         <button
+          onClick={() => setShowMenu(true)}
           className="p-1.5 hover:bg-secondary rounded-lg transition-colors flex-shrink-0"
-          aria-label="Chat info"
+          aria-label="Chat options"
         >
           <Info className="w-5 h-5" />
         </button>
       </div>
+
+      {/* Chat Room Menu */}
+      <ChatRoomMenu
+        isOpen={showMenu}
+        onClose={() => setShowMenu(false)}
+        userName={otherParticipant?.name || 'User'}
+        onLeaveChat={handleLeaveChat}
+        onBlockUser={handleBlockUser}
+      />
 
       {/* Messages */}
       <MessageList messages={room.messages} />
