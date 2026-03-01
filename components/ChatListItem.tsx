@@ -78,26 +78,26 @@ export default function ChatListItem({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
-        className={`w-full px-3 py-3 rounded-lg flex items-start gap-3 transition-colors ${
-          isActive ? 'bg-secondary' : 'hover:bg-secondary/50'
+        className={`w-full px-2 py-2 rounded-2xl flex items-center gap-3 transition-colors ${
+          isActive ? 'bg-secondary' : 'hover:bg-muted/20'
         }`}
       >
         {/* Avatar with Online Indicator */}
         <div className="flex-shrink-0 relative">
-          <Avatar className="h-10 w-10 border border-border">
-            <AvatarFallback className="bg-accent text-accent-foreground font-semibold text-xs">
+          <Avatar className="h-14 w-14 border-2 border-border flex-shrink-0">
+            <AvatarFallback className="bg-accent text-accent-foreground font-bold text-base">
               {initials}
             </AvatarFallback>
           </Avatar>
           {otherParticipant?.isOnline && (
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-background" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-background" />
           )}
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0 text-left">
-          <div className="flex items-baseline justify-between gap-2 mb-1">
-            <h3 className="text-sm font-medium text-foreground truncate">
+          <div className="flex items-center justify-between gap-2 mb-0.5">
+            <h3 className="text-base font-semibold text-foreground truncate">
               {otherParticipant?.name}
             </h3>
             <span className="text-xs text-muted-foreground flex-shrink-0">
@@ -106,19 +106,19 @@ export default function ChatListItem({
           </div>
 
           {lastMessage && (
-            <p className="text-xs text-muted-foreground truncate">
+            <p className="text-sm text-muted-foreground truncate leading-snug">
               {formatPreview(lastMessage.text)}
             </p>
           )}
         </div>
 
         {/* Pinned and Muted Icons */}
-        <div className="flex items-center gap-1 flex-shrink-0 pt-1">
+        <div className="flex items-center gap-1 flex-shrink-0">
           {room.isPinned && (
-            <Pin className="w-3.5 h-3.5 text-accent" />
+            <Pin className="w-4 h-4 text-accent" />
           )}
           {room.isMuted && (
-            <BellOff className="w-3.5 h-3.5 text-muted-foreground" />
+            <BellOff className="w-4 h-4 text-muted-foreground" />
           )}
         </div>
       </button>
@@ -132,37 +132,37 @@ export default function ChatListItem({
             onClick={() => setShowMenu(false)}
           />
           {/* Menu */}
-          <div className="absolute right-2 top-0 z-50 bg-card border border-border rounded-lg shadow-lg overflow-hidden min-w-40">
+          <div className="absolute right-0 top-full z-50 mt-1 bg-white border border-border rounded-2xl shadow-md overflow-hidden min-w-48">
             <button
               onClick={(e) => { e.stopPropagation(); onTogglePin(); setShowMenu(false); }}
-              className="w-full px-4 py-2.5 text-sm text-foreground hover:bg-secondary flex items-center gap-3 transition-colors"
+              className="w-full px-4 py-3 text-sm text-foreground hover:bg-muted/30 flex items-center gap-3 transition-colors"
             >
               <Pin className="w-4 h-4" />
-              {room.isPinned ? 'Unpin' : 'Pin'}
+              {room.isPinned ? 'Unpin chat' : 'Pin chat'}
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); onToggleMute(); setShowMenu(false); }}
-              className="w-full px-4 py-2.5 text-sm text-foreground hover:bg-secondary flex items-center gap-3 transition-colors"
+              className="w-full px-4 py-3 text-sm text-foreground hover:bg-muted/30 flex items-center gap-3 transition-colors"
             >
               {room.isMuted ? (
                 <>
                   <Bell className="w-4 h-4" />
-                  Unmute
+                  Enable notifications
                 </>
               ) : (
                 <>
                   <BellOff className="w-4 h-4" />
-                  Mute
+                  Mute notifications
                 </>
               )}
             </button>
             <div className="border-t border-border" />
             <button
               onClick={() => setShowMenu(false)}
-              className="w-full px-4 py-2.5 text-sm text-muted-foreground hover:bg-secondary flex items-center gap-3 transition-colors"
+              className="w-full px-4 py-3 text-sm text-muted-foreground hover:bg-muted/30 flex items-center gap-3 transition-colors"
             >
               <X className="w-4 h-4" />
-              Cancel
+              Close
             </button>
           </div>
         </>

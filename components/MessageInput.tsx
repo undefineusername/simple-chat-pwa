@@ -55,31 +55,31 @@ export default function MessageInput({ onSend, autoFocus = false }: MessageInput
   };
 
   return (
-    <div className="flex-shrink-0 bg-background border-t border-border px-3 py-2 safe-area-inset-bottom">
+    <div className="flex-shrink-0 bg-background border-t border-border px-3 py-3 safe-area-inset-bottom">
       <div className="flex items-end gap-2">
         <button
-          className="flex-shrink-0 p-2 rounded-lg bg-secondary hover:bg-muted transition-colors text-foreground"
+          className="flex-shrink-0 p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
           aria-label="Add attachment"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-6 h-6" />
         </button>
 
-        <div className="flex-1 relative bg-secondary rounded-2xl px-3 py-1.5 border border-border focus-within:border-accent transition-colors">
+        <div className="flex-1 relative bg-muted rounded-full px-4 py-2.5 focus-within:ring-2 focus-within:ring-accent transition-all">
           <textarea
             ref={textareaRef}
             value={message}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
+            placeholder="Message..."
             rows={rows}
-            className="w-full bg-transparent text-foreground placeholder-muted-foreground outline-none resize-none text-sm leading-5"
+            className="w-full bg-transparent text-foreground placeholder-muted-foreground outline-none resize-none text-base leading-relaxed"
           />
         </div>
 
         <button
           onClick={handleSend}
           disabled={!message.trim()}
-          className="flex-shrink-0 p-2 rounded-lg bg-accent hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed text-accent-foreground transition-all"
+          className="flex-shrink-0 p-2 rounded-full bg-accent hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed text-accent-foreground transition-all"
           aria-label="Send message"
         >
           <Send className="w-5 h-5" />

@@ -19,22 +19,19 @@ export default function MessageBubble({
 
   return (
     <div
-      className={`relative px-4 py-3 rounded-2xl ${isUser
-        ? 'bg-accent text-accent-foreground rounded-br-none'
-        : 'bg-secondary text-foreground rounded-bl-none'
+      className={`relative px-4 py-2.5 rounded-3xl max-w-xs ${isUser
+        ? 'bg-accent text-accent-foreground'
+        : 'bg-muted text-foreground'
         }`}
     >
       <p className="text-base leading-relaxed break-words">{text}</p>
-      <div className={`text-xs mt-1 flex items-center gap-1 ${isUser ? 'text-accent-foreground/60' : 'text-muted-foreground'
+      <div className={`text-xs mt-0.5 flex items-center gap-1 justify-end ${isUser ? 'text-accent-foreground/70' : 'text-muted-foreground'
         }`}>
-        {isUser && (
-          <>
-            {status === 'read' ? (
-              <CheckCheck className="w-3 h-3 text-accent-foreground/80" />
-            ) : (
-              <Check className="w-3 h-3 text-accent-foreground/80" />
-            )}
-          </>
+        {isUser && status === 'read' && (
+          <CheckCheck className="w-3 h-3" />
+        )}
+        {isUser && status !== 'read' && (
+          <Check className="w-3 h-3" />
         )}
         <span>{timestamp}</span>
       </div>
