@@ -4,40 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Light theme inspired by KakaoTalk - Clean, bright, modern */
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #f5f5f5;
-  --card-foreground: #000000;
+  /* Clean, modern light theme with warm purple accent */
+  --background: #fafbfc;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
   --popover: #ffffff;
-  --popover-foreground: #000000;
+  --popover-foreground: #1a1a1a;
   --primary: #ffffff;
-  --primary-foreground: #000000;
-  --secondary: #f0f0f0;
-  --secondary-foreground: #000000;
-  --muted: #e5e5e5;
-  --muted-foreground: #888888;
-  --accent: #7c3aed;
+  --primary-foreground: #1a1a1a;
+  --secondary: #f0f2f5;
+  --secondary-foreground: #1a1a1a;
+  --muted: #e8eaed;
+  --muted-foreground: #6b7280;
+  --accent: #5865f2;
   --accent-foreground: #ffffff;
-  --destructive: #ef4444;
+  --destructive: #ff5757;
   --destructive-foreground: #ffffff;
-  --border: #e0e0e0;
-  --input: #f5f5f5;
-  --ring: #7c3aed;
-  --chart-1: #7c3aed;
-  --chart-2: #888888;
-  --chart-3: #cccccc;
-  --chart-4: #dddddd;
-  --chart-5: #eeeeee;
+  --border: #dfe1e5;
+  --input: #f0f2f5;
+  --ring: #5865f2;
+  --chart-1: #5865f2;
+  --chart-2: #9ca3af;
+  --chart-3: #d1d5db;
+  --chart-4: #e5e7eb;
+  --chart-5: #f3f4f6;
   --radius: 1rem;
   --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #7c3aed;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #5865f2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #7c3aed;
+  --sidebar-accent: #5865f2;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #e0e0e0;
-  --sidebar-ring: #7c3aed;
+  --sidebar-border: #dfe1e5;
+  --sidebar-ring: #5865f2;
 }
 
 /* Deep Navy Theme */
@@ -64,56 +64,56 @@
 
 /* Accent Color Variants */
 [data-accent='electric-blue'] {
-  --accent: #3b82f6;
-  --ring: #3b82f6;
-  --chart-1: #3b82f6;
-  --sidebar-primary: #3b82f6;
-  --sidebar-accent: #3b82f6;
-  --sidebar-ring: #3b82f6;
+  --accent: #0099ff;
+  --ring: #0099ff;
+  --chart-1: #0099ff;
+  --sidebar-primary: #0099ff;
+  --sidebar-accent: #0099ff;
+  --sidebar-ring: #0099ff;
 }
 
 [data-accent='vivid-pink'] {
-  --accent: #ec4899;
-  --ring: #ec4899;
-  --chart-1: #ec4899;
-  --sidebar-primary: #ec4899;
-  --sidebar-accent: #ec4899;
-  --sidebar-ring: #ec4899;
+  --accent: #f23d6d;
+  --ring: #f23d6d;
+  --chart-1: #f23d6d;
+  --sidebar-primary: #f23d6d;
+  --sidebar-accent: #f23d6d;
+  --sidebar-ring: #f23d6d;
 }
 
 .dark {
-  --background: #f8f8f8;
-  --foreground: #000000;
-  --card: #f0f0f0;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #ffffff;
-  --primary-foreground: #000000;
-  --secondary: #e8e8e8;
-  --secondary-foreground: #000000;
-  --muted: #d5d5d5;
-  --muted-foreground: #777777;
-  --accent: #7c3aed;
+  --background: #111214;
+  --foreground: #f0f2f5;
+  --card: #1e1f22;
+  --card-foreground: #f0f2f5;
+  --popover: #1e1f22;
+  --popover-foreground: #f0f2f5;
+  --primary: #2c2f33;
+  --primary-foreground: #f0f2f5;
+  --secondary: #2c2f33;
+  --secondary-foreground: #f0f2f5;
+  --muted: #40444b;
+  --muted-foreground: #949ba4;
+  --accent: #5865f2;
   --accent-foreground: #ffffff;
-  --destructive: #ef4444;
+  --destructive: #ff5757;
   --destructive-foreground: #ffffff;
-  --border: #d0d0d0;
-  --input: #f0f0f0;
-  --ring: #7c3aed;
-  --chart-1: #7c3aed;
-  --chart-2: #888888;
-  --chart-3: #bbbbbb;
-  --chart-4: #cccccc;
-  --chart-5: #dddddd;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #7c3aed;
+  --border: #40444b;
+  --input: #2c2f33;
+  --ring: #5865f2;
+  --chart-1: #5865f2;
+  --chart-2: #6b7280;
+  --chart-3: #4b5563;
+  --chart-4: #40444b;
+  --chart-5: #2c2f33;
+  --sidebar: #2c2f33;
+  --sidebar-foreground: #f0f2f5;
+  --sidebar-primary: #5865f2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #7c3aed;
+  --sidebar-accent: #5865f2;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #d0d0d0;
-  --sidebar-ring: #7c3aed;
+  --sidebar-border: #40444b;
+  --sidebar-ring: #5865f2;
 }
 
 @theme inline {
