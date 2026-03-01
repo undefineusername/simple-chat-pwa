@@ -36,7 +36,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('oled-black');
-  const [accentColor, setAccentColor] = useState<AccentColor>('neon-green');
+  const [accentColor, setAccentColor] = useState<AccentColor>('electric-blue');
   const [textSize, setTextSize] = useState<TextSize>('medium');
   const [stealthMode, setStealthMode] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
